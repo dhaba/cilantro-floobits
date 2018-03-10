@@ -1,0 +1,24 @@
+#Virtual Python Environments
+/venv
+
+#Integrated Development Environments
+/.idea
+.idea/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.pyc
+*$py.class
+
+# C extensions
+*.so
+
+.cache/
+cilantro.egg-info/
+
+# FOR DEMO
+cilantro/faucet.json
+
+# LOGS
+**/logs
