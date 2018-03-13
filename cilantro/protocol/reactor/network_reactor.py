@@ -5,7 +5,6 @@ import aioprocessing
 from multiprocessing import Process, Queue
 from threading import Thread
 from cilantro.logger import get_logger
-from random import random
 import time
 
 
@@ -71,7 +70,6 @@ class ReactorCore(Thread):
                 "Subscriber already exists for that socket (sockets={})".format(self.sockets)
 
             socket = self.ctx.socket(socket_type=zmq.SUB)
-            self.log.debug("created socket: {}".format(socket))
             socket.setsockopt(zmq.SUBSCRIBE, b'')
             socket.connect(cmd.kwargs['url'])
             future = asyncio.ensure_future(self.receive(socket, cmd.kwargs['callback']))
@@ -120,7 +118,7 @@ class ReactorCore(Thread):
 
     async def receive(self, socket, callback):
         # could just use self.socket here
-        self.log.warning("--- Starting Receiving for socket: {} ----".format(socket))
+        self.log.warning("--- Starting Receiving ----")
         while True:
             self.log.info("waiting for msg...")
             msg = await socket.recv()
@@ -163,25 +161,25 @@ def do_something_else(data):
     log = get_logger("Main")
     log.info("do_something_ELSE with data: {}".format(data))
 
-if __name__ == "__main__":
-    log = get_logger("Main")
-    log.debug("\n\n-- MAIN THREAD --")
-    # q = aioprocessing.AioQueue()
-    # reactor = NetworkReactor(queue=q)
-    # reactor.start()
-    #
-    # q.coro_put(Command(Command.SUB, url=URL, callback=do_something))
-    #
-    # q.coro_put(Command(Command.PUB, url=URL2, data=b'oh boy i hope this gets through'))
-
-    nr = NetworkReactor()
-    nr.execute(Command.SUB, url=URL, callback=do_something)
-    nr.execute(Command.PUB, url=URL2, data=b'oh boy i hope this gets through')
-
-    log.critical("Will stop subbing in 6 seconds...")
-    time.sleep(6)
-    nr.execute(Command.UNSUB, url=URL)
-
-    log.critical("Rescribing in 2 seconds...")
-    time.sleep(2)
-    nr.execute(Command.SUB, url=URL, callback=do_something_else)
+# if __name__ == "__main__":
+#     log = get_logger("Main")
+#     log.debug("\n\n-- MAIN THREAD --")
+#     # q = aioprocessing.AioQueue()
+#     # reactor = NetworkReactor(queue=q)
+#     # reactor.start()
+#     #
+#     # q.coro_put(Command(Command.SUB, url=URL, callback=do_something))
+#     #
+#     # q.coro_put(Command(Command.PUB, url=URL2, data=b'oh boy i hope this gets through'))
+#
+#     nr = NetworkReactor()
+#     nr.execute(Command.SUB, url=URL, callback=do_something)
+#     nr.execute(Command.PUB, url=URL2, data=b'oh boy i hope this gets through')
+#
+#     log.critical("Will stop subbing in 6 seconds...")
+#     time.sleep(6)
+#     nr.execute(Command.UNSUB, url=URL)
+#
+#     log.critical("Rescribing in 2 seconds...")
+#     time.sleep(2)
+#     nr.execute(Command.SUB, url=URL, callback=do_something_else)
