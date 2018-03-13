@@ -14,9 +14,11 @@ import zmq
 import zmq.asyncio
 
 URL = "tcp://127.0.0.1:5566"
+# URL = "tcp://127.0.0.1:5577"
 
 class Sub():
-    def __init__(self, url="tcp://127.0.0.1:5566"):
+    def __init__(self, url=URL):
+        self.log = get_logger("SUB@{}".format(url[-4:]))
         self.url = url
         self.ctx = zmq.asyncio.Context()
         self.socket = self.ctx.socket(socket_type=zmq.SUB)
@@ -30,7 +32,6 @@ class Sub():
         # asyncio.ensure_future(self.listen())
 
         self.loop.run_until_complete(self.listen())
-
         print("i am unblocked!")
 
     async def test(self):
@@ -39,18 +40,18 @@ class Sub():
         print("test done")
 
     async def listen(self):
-        print("Starting listening...")
+        self.log.debug("\n\n\nStarting listening...")
         while True:
-            print("sub waiting...")
+            self.log.debug("sub waiting...")
             # msg = self.socket.recv()
             msg = await self.socket.recv()
-            print("sub got msg: {}".format(msg))
+            self.log.debug("sub got msg: {}".format(msg))
 
 
 
 if __name__ == "__main__":
     sub = Sub()
 
-    time.sleep(16)
+    time.sleep(200)
 
     print("done")

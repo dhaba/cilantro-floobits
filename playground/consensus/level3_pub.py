@@ -5,7 +5,7 @@ import time
 URL = "tcp://127.0.0.1:5566"
 
 class Pub():
-    def __init__(self, url="tcp://127.0.0.1:5566"):
+    def __init__(self, url=URL):
         self.url = url
         self.ctx = zmq.Context()
         self.socket = self.ctx.socket(socket_type=zmq.PUB)
