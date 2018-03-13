@@ -177,6 +177,13 @@ class Delegate:
         asyncio.set_event_loop(loop)
 
         def get_message(connection):
+
+            # DEBUG
+            # if connection[-1] != '0':
+            #     self.log.debug("Ignoring poke attempt, as he was not the chosen one")
+            #     return
+            # END DEBUG
+
             context = zmq.Context()
             request_socket = context.socket(socket_type=zmq.REQ)
             request_socket.connect(connection)
@@ -199,7 +206,7 @@ class Delegate:
 
         loop.run_until_complete(asyncio.wait(tasks))
 
-        self.log.critical("Closing event loop!")
+        self.log.critical("\nClosing event loop!\n")
         loop.close()
 
 
